@@ -1,0 +1,10 @@
+# Written by keypad.lua on every paint.
+keypad-render/
+
+# Generated locally by scripts/render-keypad-icons.swift.
+keypad-icons/
+
+# Installed by Hammerspoon's own updater.
+Spoons/
+
+.DS_Store

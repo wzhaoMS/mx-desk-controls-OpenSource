@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "sourceRepository": "https://github.com/shensquared/mx-creative-console",
+  "publicBaseCommit": "8c29376",
+  "localCommit": "2227b5b4d80bf9e3969457f219d8098769062830",
+  "localCommitAvailableFromUpstream": false,
+  "license": "MIT, original LICENSE included in the archive",
+  "archive": "mxcc-helper-source-2227b5b.tar.gz",
+  "archiveSha256": "b66daef1334044c1663c5cea2658c221e364f5c00c00ab58ecfde94e79db21dd",
+  "files": ["LICENSE", "Makefile", "src/helper.c"],
+  "helperSourceSha256": "16087e4d0441310e01bada9872bddfde7e7150dd9d17db2a31a5660c0bef96ea",
+  "previouslyInstalledBinarySha256": "41a63aa33b80421120a2c9ca8d7088b3fa0b4345df84a7bff8d0855948a8c701",
+  "installedPath": "~/.local/libexec/mxcc-helper",
+  "transport": "Hammerspoon child process stdin/stdout",
+  "verifiedOn": "2026-09-09",
+  "validation": "Archived source compiled with preinstalled clang and macOS system frameworks; rebuilt binary was not run or installed",
+  "binaryReproducibility": "Compiler and local code signing affect the binary hash; do not compare a rebuilt binary to the historical installed fingerprint"
+}
