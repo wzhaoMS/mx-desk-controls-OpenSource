@@ -79,6 +79,9 @@ No script in this repository downloads or installs anything.
   100 W cable fixed it; `pmset -g ac` should report 90 W.
 - In HIGH DATA SPEED mode the USB-C link has 2 DisplayPort lanes. Above 60 Hz the
   picture went black, so the refresh guard caps the monitor at 60 Hz.
+- Since macOS 27.2.1 the Mac also picks 10-bit colour at 60 Hz, which needs DSC on
+  that link and stays black; the monitor then powers off after about 3 minutes.
+  The guard selects the 8-bit RGB connection mode after every display change or wake.
 - macOS stores a separate display configuration for the lid-closed layout; the
   guard corrects the rate it restores.
 - A BetterDisplay "keepalive" virtual display strands windows on an invisible

@@ -53,6 +53,22 @@ upstream port:
 - macOS remembers display settings per set of connected displays. The lid-closed
   set restored 165 Hz and went black; the refresh guard corrects it about 1.5 s
   after any display change.
+- **After the macOS 27.2.1 update the picture was black at 60 Hz too.** About 3
+  minutes after a connect without a picture the monitor powered down and dropped
+  USB-C entirely (power, hub and video; `pmset -g log` alternated `Using AC` and
+  `Using Batt`). The kernel log
+  (`log show --predicate 'eventMessage CONTAINS "mode_set_gated"'`) showed every
+  connect as `5120x2160@59 Hz DSC=YES`: macOS now drives the monitor at 10 bits
+  per colour, about 21.7 Gbps at 60 Hz against the link's 19.2 Gbps, so it needs
+  DSC, which this link shows black. 8-bit RGB needs about 16.9 Gbps and runs
+  without DSC (`DSC=NO`); the monitor showed it as soon as it was on USB-C. After
+  every display change or wake [dell-refresh.lua](../dell-refresh.lua) therefore
+  selects the `8bit SDR RGB Full` connection mode with
+  `BetterDisplay get|set -name=AW3926QW -connectionMode`, because BetterDisplay
+  does not keep it across reconnects. HDR is left alone. Before login Hammerspoon
+  is not running and the monitor stays black: log in on the built-in display.
+  While the USB-C picture is black the monitor may move to DisplayPort on its own
+  (VCP `0x60` reads `0x1B0F`); press MAC once the Mac sends 8-bit.
 - Input switching from the Mac works in both directions, including while the PC
   is on screen. The Mac keeps the monitor connected throughout.
 - Reads of VCP `0x60` return USB-C as `0x1B1B` and DisplayPort as `0x1B0F`; the

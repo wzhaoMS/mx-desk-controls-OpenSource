@@ -36,7 +36,7 @@ other_branches: lg (LG UltraGear 45GX950A-B PBP/PIP setup)
 | Mouse back (hold) | [mouse-buttons.lua](mouse-buttons.lua) | ⌃⌥⌘D held | Push-to-talk, 120 s safety release |
 | Mouse forward | mouse-buttons.lua | Return | Send |
 | Mouse middle | mouse-buttons.lua | ⌃⌘⇧4 | Region screenshot copied to the clipboard |
-| Any display change | [dell-refresh.lua](dell-refresh.lua) | — | Caps the AW3926QW at `MAX_HZ` (60) after 1.5 s |
+| Any display change or wake | [dell-refresh.lua](dell-refresh.lua) | — | After 1.5 s caps the AW3926QW at `MAX_HZ` (60), then selects the 8-bit RGB connection mode (no DSC) |
 
 Every talk control holds one chord, ⌃⌥⌘D. A speech-to-text app such as Handy
 must use exactly that chord in hold (push-to-talk) mode. Nothing is sent
@@ -49,7 +49,7 @@ automatically; Return is a separate button.
 | [init.lua](init.lua) | Entry point; starts the modules, stops them in `hs.shutdownCallback` | — |
 | [keypad.lua](keypad.lua) | Runs `mxcc-helper` over stdin/stdout, paints the 3×3 LCD keys, handles keypad and Dialpad events | Yes |
 | [dell-input.lua](dell-input.lua) | Monitor input switching; finds the monitor by name on every press; one BetterDisplay process at a time with a 5 s timeout | Through keypad.lua |
-| [dell-refresh.lua](dell-refresh.lua) | Refresh-rate cap after display changes | Yes |
+| [dell-refresh.lua](dell-refresh.lua) | Refresh-rate cap and 8-bit connection mode after display changes and wakes; one BetterDisplay process at a time with a 10 s timeout | Yes |
 | [mouse-buttons.lua](mouse-buttons.lua) | Mouse back, forward and middle button actions | Yes |
 | [scripts/render-keypad-icons.swift](scripts/render-keypad-icons.swift) | Generates `keypad-icons/` locally (ignored by git) | Build step |
 | [vendor/](vendor/) | Pinned MIT source of the Creative Console helper and its provenance | Build input |
@@ -65,6 +65,8 @@ automatically; Return is a separate button.
   screen the user is working on. Read-only `get` calls are fine.
 - Keep `MAX_HZ` at 60 unless the user has switched the monitor to HIGH
   RESOLUTION and confirmed a picture at the higher rate.
+- Keep the 8-bit connection mode on the 2-lane link: 10-bit at 5120x2160@60 Hz
+  needs DSC there and shows a black picture.
 - Keep the MX Creative Keypad plugged into the Mac, not into the monitor's hub.
 - Run one `mxcc-helper` only, and no other app (such as Logi Options+) that
   claims the console.
@@ -183,6 +185,7 @@ hs -c 'return hs.json.encode(keypad.recentActions())'
 | MAC/PC/SWAP show `RETRY` or alert "not connected" | The Mac does not see the monitor, or BetterDisplay failed. Use the monitor's input button; check `require("dell-input").status()` and the Hammerspoon console |
 | Monitor black or blinking on USB-C while the Mac lists it | Use the monitor's supplied 100 W USB-C cable (`pmset -g ac` should report 90 W). Keep `MAX_HZ` at 60 unless HIGH RESOLUTION gives a picture higher |
 | Monitor black after closing the lid | The refresh guard corrects the saved lid-closed rate within about 1.5 s; check `dellRefresh.status()` |
+| Monitor black at 60 Hz, then the Mac loses it (power, hub and video) about 3 minutes later | macOS 27.2.1 picked 10-bit, which needs DSC. The Hammerspoon console should show `[dell-refresh] AW3926QW … 10bit … -> … 8bit SDR RGB Full … ok=true` and the kernel log `DSC=NO`. Nothing runs before login; log in on the built-in display. If the monitor moved to the PC input meanwhile, press MAC |
 | Cannot switch back from the PC with the keypad | The keypad is on the monitor's hub and followed the KVM to the PC; plug it into the Mac |
 | Holding a talk button records nothing | The speech-to-text app uses exactly ⌃⌥⌘D in hold mode; Hammerspoon has Accessibility; MIC is not red |
 | Middle click does not screenshot | macOS "Copy picture of selected area to the clipboard" (⌃⌘⇧4) is enabled in Keyboard Shortcuts |
