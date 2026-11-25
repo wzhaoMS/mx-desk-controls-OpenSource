@@ -14,6 +14,10 @@ controls for a Mac and a Windows PC sharing one KVM monitor.
 **Agents:** start with [AGENTS.md](AGENTS.md). It has the repository map, rules,
 a setup runbook with the human steps marked, and the verification commands.
 
+**Mac falls asleep or the monitor stays black?** [docs/keep-mac-awake.md](docs/keep-mac-awake.md)
+is a standalone guide an agent can follow on any Mac with an external or KVM
+monitor: read-only diagnosis, tested fixes, verification and undo.
+
 ## Branches
 
 | Branch | Setup |
@@ -86,6 +90,9 @@ No script in this repository downloads or installs anything.
   guard corrects the rate it restores.
 - A BetterDisplay "keepalive" virtual display strands windows on an invisible
   screen whenever this monitor drops. Don't use one with this setup.
+- A LaunchAgent running `caffeinate -di` stops idle sleep, but nothing stops
+  `Clamshell Sleep` once the monitor drops with the lid closed. See
+  [docs/keep-mac-awake.md](docs/keep-mac-awake.md).
 - DDC reads can fail while the other computer is shown; writes from the Mac
   still switch the input.
 

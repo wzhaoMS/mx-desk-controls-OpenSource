@@ -55,6 +55,7 @@ automatically; Return is a separate button.
 | [vendor/](vendor/) | Pinned MIT source of the Creative Console helper and its provenance | Build input |
 | [tests/](tests/) | Mocked suites; each loads its module into a sandbox with a stub `hs` | Test |
 | [docs/desk-controls.md](docs/desk-controls.md) | Behavior, connection findings, physical checks | Docs |
+| [docs/keep-mac-awake.md](docs/keep-mac-awake.md) | Standalone guide: keep a Mac awake behind an external or KVM monitor and fix black screens | Docs |
 
 ## Rules For Agents
 
@@ -185,6 +186,7 @@ hs -c 'return hs.json.encode(keypad.recentActions())'
 | MAC/PC/SWAP show `RETRY` or alert "not connected" | The Mac does not see the monitor, or BetterDisplay failed. Use the monitor's input button; check `require("dell-input").status()` and the Hammerspoon console |
 | Monitor black or blinking on USB-C while the Mac lists it | Use the monitor's supplied 100 W USB-C cable (`pmset -g ac` should report 90 W). Keep `MAX_HZ` at 60 unless HIGH RESOLUTION gives a picture higher |
 | Monitor black after closing the lid | The refresh guard corrects the saved lid-closed rate within about 1.5 s; check `dellRefresh.status()` |
+| Mac asleep when you come back, or black for a reason not listed here | Follow [docs/keep-mac-awake.md](docs/keep-mac-awake.md): it reads the sleep reason from `pmset -g log` and maps it to a fix |
 | Monitor black at 60 Hz, then the Mac loses it (power, hub and video) about 3 minutes later | macOS 27.2.1 picked 10-bit, which needs DSC. The Hammerspoon console should show `[dell-refresh] AW3926QW … 10bit … -> … 8bit SDR RGB Full … ok=true` and the kernel log `DSC=NO`. Nothing runs before login; log in on the built-in display. If the monitor moved to the PC input meanwhile, press MAC |
 | Cannot switch back from the PC with the keypad | The keypad is on the monitor's hub and followed the KVM to the PC; plug it into the Mac |
 | Holding a talk button records nothing | The speech-to-text app uses exactly ⌃⌥⌘D in hold mode; Hammerspoon has Accessibility; MIC is not red |
